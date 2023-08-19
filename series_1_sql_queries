@@ -1,0 +1,373 @@
+-- display all the databases we have
+show databases
+
+
+use ruzuku;
+
+show tables;
+
+-- this will display all the data from the usres table
+
+select * from users;
+
+--- it show the structure of the table users
+
+describe users; 
+
+-- creating  database command
+
+create database sql_intro;
+
+show databases;
+
+use sql_intro;
+
+
+-- creating a table emp_details
+
+create table emp_details(
+Name varchar(25) not null,
+Age int,
+sex char(1),
+doj date,
+city varchar(15),
+salary float
+);
+
+describe emp_details;
+
+-- inserting data into emp_details tables
+
+insert into emp_details values('fumbuka limbu',25,'m','2022-10-28','dar es salaam',100000),
+('rehema mussa',27,'m','2022-10-28','dodoma',600000),
+('mlasa mlasa',45,'m','2022-10-28','mwanza',400000),
+('christiano ronaldo',29,'m','2022-10-28','singida',90000),
+('messi messi',28,'m','2022-10-28','arusha',220000),
+('rehema pilipili',35,'m','2022-10-28','mbeya',900000),
+('ngussa ngussa',24,'m','2022-10-28','pemba',7800000);
+
+-- the query below show the structure of the database
+describe  emp_details
+
+------------------------ SELECT STATEMENTS---------------------------
+
+select * from emp_details
+
+-- the below query will fetch the data from city column without repetition
+select DISTINCT city from emp_details;
+
+-- the below query will provide the count number of data in the emp_details
+select count(*) from emp_details;
+
+-- by providing the alliases name the fetch count will be as follows
+select count(*) as "number of employee" from emp_details
+
+
+-- below is query that get the sum of all employee salaries from the table `emp_details`
+
+select SUM(salary) as "total employee salaries" from `emp_details`
+
+
+-- to get the average salary for all the employees in the emp_details table
+select AVG(salary) as "average salary" from emp_details
+
+-- select dome of the columns from the tables
+select name,age,sex FROM emp_details
+
+-- also we can select some of the columns with alliases name from the table
+select name as "employee name", age as "employee age", salary as "monthy payment" from emp_details
+
+
+-------------- SELECT AND FILTERING ---------------------------------
+
+-- lets filter the employees with ages greater than 30
+
+select * from emp_details where age>30;
+
+-- also lets filter employees by gender
+
+select * from emp_details where sex = "f";
+
+-- using OR || operator 
+
+select * from emp_details where city = "dar es salaam" || city ="mwanza";
+
+-- usinng AND && operator
+
+select * from emp_details where sex = "m" && age > 28;
+
+-- using IN OPERATOR
+
+select * from emp_details where city IN('pemba','dar es salaam');
+
+-- using BETWEEN KEYWORD
+
+select * from emp_details where doj between '2000-01-01' AND '2023-01-01';
+
+
+
+---------- GROUP BY STATEMENT IN SQL --------------------------------
+-- here am going to group by sex and provide the sum of salary for evry gender
+
+select sex, sum(salary) as "total gender salary" from `emp_details` GROUP BY sex;
+
+
+-------- order by keyword to sort data in sql -----------------------------
+-- order by default it sort data in ascending order
+select * from emp_details order by salary desc;
+
+--------- SOME OF THE BUILT IN FUNCTIONS IN SQL ARE ------------
+
+-- different operations can be used using the select keyword
+
+select (90 + 20) as "number sum"
+
+select (78 - 40) as "number differentce"
+
+select (8 * 4) as 'multiplication'
+
+-- this will repeat the provided number or value 
+SELECT repeat('@',20)
+
+-- getting the length of a string in sql query can be given as
+select length('this is me injoi the power of select queries in sql') as 'length of sms'
+
+-- converting the output to upper case letters
+select upper('lets injoi the power of select statemment')
+
+-- get all cities but in capital letters
+select upper(city) from emp_details
+
+
+-- to convert in small letters 
+select lower('LETS ENJOI THE POWER OF SELECT QUERY')
+
+------- DATE FUNCTIONS IN SELECT QUERIES --------------------
+
+-- lets select the curent date
+select curdate() as "date of today"
+
+-- lets get the day from the current date
+
+select day(curdate())
+
+-- to get the current date and TIME
+
+select now()
+
+--- STRING FUNCTIONS IN SELECT query
+
+
+-- converting string to lower case
+select lcase('CONVERT TO LOWER CASE') as mylower
+
+select lower('CONVERT TO LOWER CASE') as amlower
+
+
+-- converting to uppercse
+
+select upper('convert to upper case') as amupper
+
+-- to get the length og characters in a string
+
+select character_length('display my length using select') as stmt_length
+
+
+-- getting the string length for every name of employee in emp_details
+
+select name as employee_name,char_length(name) as length_of_names from emp_details
+
+-- joining the strings using concat method
+
+select concat('lets ', 'injoi the ', 'power of select in sql')
+
+-- lets use on fetching from the database table
+select name,sex,concat(name,' ',sex) as name_sex from emp_details
+
+-- reverse method in sql
+select reverse('reversing the sentences');
+
+-- lets reverse from the table
+select reverse(name) from `emp_details`
+
+-- replace method in sql
+
+select replace('weakend vibing with sql query', 'sql', 'select')
+
+
+-- lets try to replace  from table
+select replace(city,'mwanza','rockcity') from `emp_details`
+
+-- ltrim method used to remove the spaces on the left side 
+
+select ltrim('    boooda booooz.       ')
+
+-- rtrim method used to remove the spaces on the right side
+
+select rtrim('    we are tec.       ')
+
+-- but trim method remove all the spaces from right and left of the sentences
+
+select trim('     here we go again         ')
+
+
+
+
+---------  GROUP BY && HAVING CONCEPTS -------------
+---- here lets create a table employees that we are going to use in our group by and having concepts
+
+show TABLES;
+
+--- create table statement for employees
+
+create table employees(
+	Emp_id int primary key,
+	Emp_name varchar(25) ,
+	Age int,
+	Gender char(1),
+	Doj date,
+	Dept varchar(20),
+	City varchar(15),
+	Salary float
+)
+
+describe employees
+
+ -- lets add 20 employees into our tables
+ 
+ insert into employees values
+ (101,'fatna temba',30,'f','2020-02-01','finance','moshi',1200000),
+ (102,'fumbuka limbu',25,'m','2022-02-01','it','mwanza',1700000),
+ (103,'rehema mussa',20,'f','2023-02-01','sales','dodoma',120000),
+ (104,'sambeke eleibariki',26,'m','2021-09-01','it','arusha',1700000),
+ (105,'elibariki mussa',36,'m','2020-02-01','products','mbeya',700000),
+ (106,'godfey godfey',40,'m','2021-04-01','finance','moshi',1200000),
+ (107,'fatuma mussa juma',30,'f','2020-02-01','finance','moshi',1200000),
+ (108,'esau essau',25,'m','2022-02-01','it','mwanza',1700000),
+ (109,'rehema pilipili',20,'f','2023-02-01','sales','dodoma',120000),
+ (110,'fireman eleibariki',26,'m','2021-09-01','it','arusha',1700000),
+ (111,'elibariki mussa',36,'m','2020-02-01','products','mbeya',700000),
+ (112,'bosko godfey',40,'m','2021-04-01','finance','moshi',1200000),
+  (113,'jeneveva bakari',20,'f','2020-02-01','finance','moshi',1200000),
+ (114,'matalu limbu',25,'m','2022-02-01','it','mwanza',1700000),
+ (115,'rehema mussa',20,'f','2023-02-01','sales','dodoma',120000),
+ (116,'sambeke eleibariki',26,'m','2021-09-01','it','arusha',1700000),
+ (117,'mussa paschal',36,'m','2020-02-01','products','mbeya',700000),
+ (118,'godyliver godfey',40,'f','2021-04-01','products','kilimanjaro',1200000),
+  (119,'temba temba',40,'m','2020-02-01','it','moshi',2200000),
+ (120,'limbu fumbuka',25,'m','2022-02-01','finance','mwanza',1700000)
+
+
+
+-- lets retrieve all the data in the employees tables to see if our data are availlable
+
+select * from employees
+
+--- lets write a query to fetch data from employees table by  grouping them department wise
+
+select dept, AVG(`salary`) from employees group by dept;
+
+-- i the above group lets add a filter 
+select dept, avg(`salary`) from employees where age>25 group by dept
+
+-- lets group our employees and find the average salary gender wise
+
+select gender as 'sex',avg(salary) as 'avarage salary' from employees group by gender
+
+-- lets check the distinct city availlable in our table
+
+select distinct(city) from employees
+
+-- lets find average age in every deptment
+
+select dept,avg(age) as 'average age' from employees group by dept;
+
+-- sum of ages for every dept
+
+select dept, sum(age) as 'sum of ages' from employees group by dept
+
+-- total salary for every dept
+
+
+select dept, sum(salary) as 'sum of salaries' from employees group by dept order by `Salary` desc
+
+
+--- lets group by the year of join with the number of employees
+select year(Doj) as 'year', count(`Emp_id`) from employees group by `Doj` order by count(`Emp_id`) asc
+
+
+
+-- CRETAE A TABLES SALES 
+
+create table sales(
+	Product_id int,
+	 Sell_price float,
+	 Quantity int,
+	 Location varchar(20)
+)
+
+
+-- lets add some of the sales data into the sales table
+
+insert into sales values
+(131,300.0,4,'mwanza'),
+(132,1000.0,4,'mwanza'),
+(131,300.0,10,'kigoma'),
+(131,300.0,4,'bukoba'),
+(133,20000.0,4,'mwanza'),
+(131,300.0,4,'mwanza'),
+(131,300.0,4,'arusha'),
+(134,700.0,4,'mwanza'),
+(131,300.0,4,'mbeya'),
+(135,8000.0,4,'mwanza'),
+(131,300.0,4,'morogoro'),
+(135,8000.0,7,'dar es salaam'),
+(132,1000.0,2,'mwanza'),
+(132,1000.0,9,'mbeya'),
+(132,1000.0,12,'ruvuma'),
+(132,1000.0,4,'dar es salaam')
+
+
+select * from sales
+
+-- lets group our sales by product_id and calculate the revenue
+
+select product_id as 'product no',sum(sell_price * quantity) as 'product revenue' from sales 
+group by product_id order by sum(sell_price * quantity) desc
+
+
+-- CRETAE A TABLE COST_PRODUCT
+
+create table c_products
+(
+Product_id int,
+Cost_price float
+)
+
+
+--- insert data into c_products
+
+insert into c_products values
+(131,250.0),
+(132,800.0),
+(133,1500.0),
+(134,500.0)
+
+
+
+
+-- now lets calculate the profits for every product sold by joining sales and cost_products tables
+
+select c.Product_id as 'solid products', sum((s.Sell_price - c.Cost_price) * s.quantity) as 'Profits'
+from sales as s inner join c_products as c where s.product_id = c.product_id group by c.product_id order by sum((s.Sell_price - c.Cost_price) * s.quantity) desc
+
+
+
+
+
+
+
+
+
+
+
